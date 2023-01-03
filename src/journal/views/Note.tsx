@@ -41,7 +41,27 @@ export const Note = () => {
   }
 
   const onDelete = () => {
-    dispatch(startDeletingNote())
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No se podrá revertir esta acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+ 
+        dispatch(startDeletingNote());
+        
+        Swal.fire(
+          'Eliminado',
+          'La nota se ha sido eliminado correctamente',
+          'success'
+        )
+      }
+    })
   }
 
   return (
