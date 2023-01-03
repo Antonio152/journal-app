@@ -35,7 +35,7 @@ export const journalSlice = createSlice({
         updateNote: (state, action: PayloadAction<NoteModel>) => {
             state.isSaving = false;
             state.notes = state.notes.map(note => note.id === action.payload.id ? action.payload : note);
-            state.messageSaved = `Nota: ${action.payload.title}, se ha actualizado correctamente`;
+            state.messageSaved = `Nota: ${action.payload.title}, se guardaron los cambios correctamente`;
         },
         setPhotosToActiveNote: (state, action: PayloadAction<string[]>) => {
             state.active.imageUrl = [...state.active.imageUrl!, ...action.payload];

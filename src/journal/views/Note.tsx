@@ -17,7 +17,6 @@ export const Note = () => {
   const { active: noteActive, messageSaved, isSaving } = useSelector((state: RootState) => state.journal)
   const { body, title, date, onChangeEvent, formState } = useForm(noteActive)
 
-
   const dateString = useMemo(() => {
     return new Date(date).toUTCString()
   }, [date])
@@ -32,7 +31,7 @@ export const Note = () => {
 
   useEffect(() => {
     if (messageSaved.length > 0) {
-      Swal.fire('Nota actualizada', messageSaved, 'success')
+      Swal.fire('Nota', messageSaved, 'success')
     }
   }, [messageSaved])
 
@@ -43,7 +42,6 @@ export const Note = () => {
 
   const onDelete = () => {
     dispatch(startDeletingNote())
-    dispatch(startLoadingNotes())
   }
 
   return (
