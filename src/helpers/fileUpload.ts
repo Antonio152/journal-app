@@ -17,3 +17,14 @@ export const fileUpload = async (file: File) => {
         throw new Error('Unknow error');
     }
 }
+
+//Check this and implement the function
+// https://stackoverflow.com/questions/61985832/how-to-load-image-and-convert-to-blob-in-react
+const fileToDataUri = (file:File) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    // reader.onload = (event) => {
+    //   resolve(event.target.result)
+    // };
+    const url = reader.readAsDataURL(file);
+    resolve(url)
+})

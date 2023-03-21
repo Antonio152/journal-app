@@ -1,3 +1,4 @@
 export interface galleryProps {
-    imageUrl: string[]
-  }
+    imagesCloud: string[],
+    imagesToUpload: File[],
+}

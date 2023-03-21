@@ -1,68 +1,95 @@
-import { ChangeEvent, useEffect, useMemo } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-import { DeleteOutline, SaveOutlined, UploadOutlined } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  SaveOutlined,
+  UploadOutlined,
+} from "@mui/icons-material";
 import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css";
-
 import { useForm } from "../../auth/hooks/useForm";
-import { setActiveNote } from "../../store/journal/journalSlice";
-import { startDeletingNote, startLoadingNotes, startSavingNote, startUploadingFiles } from "../../store/journal/thunks";
+import { setActiveNote, setImagesUpload } from "../../store/journal/journalSlice";
+import {
+  startDeletingNote,
+  startSavingNote,
+  startUploadingFiles,
+} from "../../store/journal/thunks";
 import { RootState, useAppDispatch } from "../../store/store";
-import { ImageGallery } from '../components'
+import { ImageGallery } from "../components";
+import { dateString } from "../functions/NoteFunctions";
 
 export const Note = () => {
-  const dispatch = useAppDispatch()
-  const { active: noteActive, messageSaved, isSaving } = useSelector((state: RootState) => state.journal)
-  const { body, title, date, onChangeEvent, formState } = useForm(noteActive)
+  /* Redux logic */
+  const dispatch = useAppDispatch();
+  const {
+    active: noteActive,
+    messageSaved,
+    isSaving,
+    filesUploadImg
+  } = useSelector((state: RootState) => state.journal);
+  const { body, title, date, onChangeEvent, formState } = useForm(noteActive);
 
-  const dateString = useMemo(() => {
-    return new Date(date).toUTCString()
-  }, [date])
+  const handleStoreImages = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    if (target.files === null) return null;
+    const files = Array.from(target.files);
+
+    /* Generate array of links */
+    dispatch(setImagesUpload(files))
+  };
+
+  /* Logic to save notes */
+  const onSaveNote = () => {
+    //If the length of the array is greater than 0, then it means that there are images to upload
+    if (filesUploadImg.length > 0) {
+      dispatch(startUploadingFiles(filesUploadImg));
+    }
+    /* If you're not saving something, do this */
+    if(!isSaving){
+      dispatch(startSavingNote());
+    }
+  };
 
   useEffect(() => {
-    dispatch(setActiveNote(formState))
-  }, [formState])
+    dispatch(setActiveNote(formState));
+  }, [formState]);
 
-  const onSaveNote = () => {
-    dispatch(startSavingNote())
-  }
-
+  /* if the note is saved  */
   useEffect(() => {
     if (messageSaved.length > 0) {
-      Swal.fire('Nota', messageSaved, 'success')
+      Swal.fire("Nota", messageSaved, "success");
     }
-  }, [messageSaved])
+  }, [messageSaved]);
 
-  const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    if (target.files === null) return null;
-    dispatch(startUploadingFiles(target.files))
-  }
+  // This function should be called in the function onSaveNote
+  // const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  //   if (target.files === null) return null;
+  //   dispatch(startUploadingFiles(target.files))
+  // }
 
+  /* Logic to delete images and notes  */
   const onDelete = () => {
     Swal.fire({
-      title: '¿Estás seguro?',
+      title: "¿Estás seguro?",
       text: "No se podrá revertir esta acción",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
- 
         dispatch(startDeletingNote());
-        
+
         Swal.fire(
-          'Eliminado',
-          'La nota se ha sido eliminado correctamente',
-          'success'
-        )
+          "Eliminado",
+          "La nota se ha sido eliminado correctamente",
+          "success"
+        );
       }
-    })
-  }
+    });
+  };
 
   return (
     <Grid
@@ -75,28 +102,35 @@ export const Note = () => {
     >
       <Grid item>
         <Typography fontSize={39} fontWeight="light">
-          {dateString}
+          {dateString(date)}
         </Typography>
       </Grid>
       <Grid item>
-
-        <IconButton
-          color="primary"
-          disabled={isSaving}
-          component="label">
+        <IconButton color="primary" disabled={isSaving} component="label">
           <input
             type="file"
             multiple
             hidden
-            onChange={onFileInputChange} />
-          <UploadOutlined />
+            onChange={handleStoreImages}
+            onClick={(
+              event: React.MouseEvent<HTMLInputElement, MouseEvent>
+            ) => {
+              const element = event.target as HTMLInputElement;
+              element.value = "";
+            }}
+          />
+          <UploadOutlined titleAccess="Subir imagenes" />
         </IconButton>
         <Button
           color="primary"
           sx={{ padding: 2 }}
           onClick={onSaveNote}
-          disabled={isSaving}>
-          <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
+          disabled={isSaving}
+        >
+          <SaveOutlined
+            titleAccess="Guardar nota"
+            sx={{ fontSize: 30, mr: 1 }}
+          />
           Guardar
         </Button>
       </Grid>
@@ -127,19 +161,18 @@ export const Note = () => {
         />
       </Grid>
 
-
-
       <Grid container justifyContent={"end"}>
-        <Button
-          onClick={onDelete}
-          sx={{ mt: 2 }}
-          color="error">
+        <Button onClick={onDelete} sx={{ mt: 2 }} color="error">
           <DeleteOutline />
         </Button>
       </Grid>
-
       {/* Image gallery */}
-      <ImageGallery imageUrl={noteActive.imageUrl!} />
+      <ImageGallery
+        imagesCloud={noteActive.imageUrl!}
+        imagesToUpload={filesUploadImg}
+      />
     </Grid>
   );
 };
+
+//indicador

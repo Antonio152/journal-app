@@ -7,7 +7,8 @@ export const journalSlice = createSlice({
         isSaving: false,
         messageSaved: "",
         notes: <NoteModel[]>[],
-        active: <NoteModel>{}
+        active: <NoteModel>{},
+        filesUploadImg: <File[]>[]
     },
     reducers: {
         /* Helps to know if a new Note is saving */
@@ -18,6 +19,7 @@ export const journalSlice = createSlice({
         addEmptyNote: (state, action: PayloadAction<NoteModel>) => {
             state.notes.push(action.payload);
             state.isSaving = false;
+            state.filesUploadImg = [];
         },
         /* Set the note that is selected or is active/saved */
         setActiveNote: (state, action: PayloadAction<NoteModel>) => {
@@ -40,6 +42,7 @@ export const journalSlice = createSlice({
         setPhotosToActiveNote: (state, action: PayloadAction<string[]>) => {
             state.active.imageUrl = [...state.active.imageUrl!, ...action.payload];
             state.isSaving = false;
+            state.filesUploadImg = [];
         },
         clearNoteOnLogout: (state) => {
             state.isSaving = false;
@@ -52,6 +55,7 @@ export const journalSlice = createSlice({
                 date: "",
                 imageUrl: []
             };
+            state.filesUploadImg = [];
         },
         deleteNoteById: (state, action: PayloadAction<NoteModel>) => {
             state.notes = state.notes.filter(note => note.id !== action.payload.id);
@@ -61,11 +65,19 @@ export const journalSlice = createSlice({
                 body: "",
                 date: "",
                 imageUrl: []
-            };;
+            };
+            state.filesUploadImg = [];
+        },
+        /* Store images */
+        setImagesUpload: (state, action: PayloadAction<File[]>) => {
+            state.filesUploadImg = [...state.filesUploadImg, ...action.payload];
+        },
+        removeImageFromArray: (state, action: PayloadAction<number>) => {
+            state.filesUploadImg = state.filesUploadImg.filter((_, i) => i !== action.payload)
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { clearNoteOnLogout, setPhotosToActiveNote, isSavingNewNote, addEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById } = journalSlice.actions;
+export const { clearNoteOnLogout, setPhotosToActiveNote, isSavingNewNote, addEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById,setImagesUpload,removeImageFromArray } = journalSlice.actions;
