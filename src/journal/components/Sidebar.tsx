@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux';
 import { SidebarItem } from './SidebarItem';
 
 export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
-    const { displayName } = useSelector((state: RootState) => state.auth)
+    const { displayName,photoURL } = useSelector((state: RootState) => state.auth)
     const { notes } = useSelector((state: RootState) => state.journal)
-    
     return (
         <Box
             component='nav'
@@ -22,7 +21,8 @@ export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
                 }}
             >
                 <Toolbar>
-                    <Typography variant='h6' noWrap component='div'>
+                    <Typography variant='inherit' component='div' sx={{display:"flex"}}>
+                        <img src={photoURL} alt={displayName} width={35} height={35} style={{borderRadius: "50%", margin:"auto", marginRight: 8}} />
                         {displayName}
                     </Typography>
                 </Toolbar>

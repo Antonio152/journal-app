@@ -1,7 +1,7 @@
-import { TurnedInNot } from '@mui/icons-material'
+import NoteIcon from '@mui/icons-material/Note';
 import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { useMemo } from 'react'
-import { setActiveNote, updateNote } from '../../store/journal/journalSlice'
+import { setActiveNote } from '../../store/journal/journalSlice'
 import { NoteModel } from '../../store/journal/types/journalSliceTypes'
 import { useAppDispatch } from '../../store/store'
 
@@ -20,8 +20,8 @@ export const SidebarItem = ({ title, id, body, date, imageUrl = [] }: NoteModel)
     return (
         <ListItem key={id} disablePadding >
             <ListItemButton onClick={()=>defineActiveNote()}>
-                <ListItemIcon>
-                    <TurnedInNot />
+                <ListItemIcon sx={{display:"flex",justifyContent:"center" }}>
+                    <NoteIcon />
                 </ListItemIcon>
                 <Grid container>
                     <ListItemText primary={newTitle} />

@@ -14,8 +14,6 @@ export const Journal = () => {
   return (
     <JournalLayout>
       {Object.keys(active).length > 0 && active?.id !== "" ? <Note /> : <NothingSelected />}
-      {/* <NothingSelected /> */}
-      {/* <Note/> */}
       <IconButton
         size='large'
         sx={{
