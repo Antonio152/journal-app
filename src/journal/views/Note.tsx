@@ -9,12 +9,11 @@ import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css";
 import { useForm } from "../../auth/hooks/useForm";
-import { setActiveNote, setImagesUpload } from "../../store/journal/journalSlice";
 import {
-  startDeletingNote,
-  startSavingNote,
-  startUploadingFiles,
-} from "../../store/journal/thunks";
+  setActiveNote,
+  setImagesUpload,
+} from "../../store/journal/journalSlice";
+import { startDeletingNote, startSavingNote } from "../../store/journal/thunks";
 import { RootState, useAppDispatch } from "../../store/store";
 import { ImageGallery } from "../components";
 import { dateString } from "../functions/NoteFunctions";
@@ -26,7 +25,7 @@ export const Note = () => {
     active: noteActive,
     messageSaved,
     isSaving,
-    filesUploadImg
+    filesUploadImg,
   } = useSelector((state: RootState) => state.journal);
   const { body, title, date, onChangeEvent, formState } = useForm(noteActive);
 
@@ -35,19 +34,12 @@ export const Note = () => {
     const files = Array.from(target.files);
 
     /* Generate array of links */
-    dispatch(setImagesUpload(files))
+    dispatch(setImagesUpload(files));
   };
 
   /* Logic to save notes */
   const onSaveNote = () => {
-    //If the length of the array is greater than 0, then it means that there are images to upload
-    if (filesUploadImg.length > 0) {
-      dispatch(startUploadingFiles(filesUploadImg));
-    }
-    /* If you're not saving something, do this */
-    if(!isSaving){
-      dispatch(startSavingNote());
-    }
+    dispatch(startSavingNote());
   };
 
   useEffect(() => {
@@ -60,12 +52,6 @@ export const Note = () => {
       Swal.fire("Nota", messageSaved, "success");
     }
   }, [messageSaved]);
-
-  // This function should be called in the function onSaveNote
-  // const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-  //   if (target.files === null) return null;
-  //   dispatch(startUploadingFiles(target.files))
-  // }
 
   /* Logic to delete images and notes  */
   const onDelete = () => {
@@ -106,18 +92,20 @@ export const Note = () => {
         </Typography>
       </Grid>
       <Grid item>
-        <IconButton color="primary" disabled={isSaving} component="label">
+        <IconButton
+          color="primary"
+          disabled={isSaving}
+          component="label"
+          onClick={(event) => {
+            const element = event.target as HTMLInputElement;
+            element.value = "";
+          }}
+        >
           <input
             type="file"
             multiple
             hidden
             onChange={handleStoreImages}
-            onClick={(
-              event: React.MouseEvent<HTMLInputElement, MouseEvent>
-            ) => {
-              const element = event.target as HTMLInputElement;
-              element.value = "";
-            }}
           />
           <UploadOutlined titleAccess="Subir imagenes" />
         </IconButton>

@@ -42,28 +42,39 @@ export const startSavingNote = () => {
     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
         dispatch(setSaving())
         const { uid } = getState().auth
-        const { active } = getState().journal
+        const { active, filesUploadImg } = getState().journal
         if (!uid) throw new Error("El UID del usuario no existe");
         const noteToFirestore = { ...active }
         delete noteToFirestore.id
+        /* Store images in cloud */
+        if (filesUploadImg.length > 0) {
+            const fileUploadPromises = []
+            for (const file of filesUploadImg) {
+                fileUploadPromises.push(fileUpload(file))
+            }
+            const photosUrl = await Promise.all(fileUploadPromises)
+            noteToFirestore.imageUrl = [...active.imageUrl!, ...photosUrl]
+        }
+        const updatedNote = {...active, imageUrl:noteToFirestore.imageUrl}
         const docRef = doc(FirebaseDB, `${uid}/journal/notes/${active.id}`)
         /* The prop merge , helps to add the values that missing in the DB */
         await setDoc(docRef, noteToFirestore, { merge: true })
-        dispatch(updateNote(active))
+        dispatch(updateNote(updatedNote))
     }
 }
 
-export const startUploadingFiles = (files = <File[]>[]) => {
-    return async (dispatch: AppDispatch) => {
-        dispatch(setSaving())
-        const fileUploadPromises = []
-        for (const file of files) {
-            fileUploadPromises.push(fileUpload(file))
-        }
-        const photosUrl = await Promise.all(fileUploadPromises)
-        dispatch(setPhotosToActiveNote(photosUrl))
-    }
-}
+// export const startUploadingFiles = () => {
+//     return async (dispatch: AppDispatch,getState: typeof store.getState) => {
+//         dispatch(setSaving())
+//         const { filesUploadImg } = getState().journal
+//         const fileUploadPromises = []
+//         for (const file of filesUploadImg) {
+//             fileUploadPromises.push(fileUpload(file))
+//         }
+//         const photosUrl = await Promise.all(fileUploadPromises)
+//         dispatch(setPhotosToActiveNote(photosUrl))
+//     }
+// }
 /* This function delete only the note in database but no the images */
 export const startDeletingNote = () => {
     return async (dispatch: AppDispatch, getState: typeof store.getState) => {

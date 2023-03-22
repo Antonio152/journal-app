@@ -38,6 +38,9 @@ export const journalSlice = createSlice({
             state.isSaving = false;
             state.notes = state.notes.map(note => note.id === action.payload.id ? action.payload : note);
             state.messageSaved = `Nota: ${action.payload.title}, se guardaron los cambios correctamente`;
+            //Note: this define the values of active note and reset the array of files to upload
+            state.active = action.payload;
+            state.filesUploadImg=[];
         },
         setPhotosToActiveNote: (state, action: PayloadAction<string[]>) => {
             state.active.imageUrl = [...state.active.imageUrl!, ...action.payload];
