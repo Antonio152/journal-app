@@ -13,7 +13,7 @@ import {
   setActiveNote,
   setImagesUpload,
 } from "../../store/journal/journalSlice";
-import { startDeletingNote, startSavingNote } from "../../store/journal/thunks";
+import { startDeletingNoteAndImages , startSavingNote } from "../../store/journal/thunks";
 import { RootState, useAppDispatch } from "../../store/store";
 import { ImageGallery } from "../components";
 import { dateString } from "../functions/NoteFunctions";
@@ -66,7 +66,7 @@ export const Note = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(startDeletingNote());
+        dispatch(startDeletingNoteAndImages());
 
         Swal.fire(
           "Eliminado",

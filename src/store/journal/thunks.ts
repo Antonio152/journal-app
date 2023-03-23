@@ -1,7 +1,7 @@
 import { collection, doc, setDoc,deleteDoc } from "firebase/firestore/lite"
 import { loadNotes } from "../../Apis/loadNotes"
 import { FirebaseDB } from "../../firebase/config"
-//import { deleteImage } from "../../helpers/fileDelete"
+import { deleteImage } from "../../helpers/fileDelete"
 import { fileUpload } from "../../helpers/fileUpload"
 import { AppDispatch, store } from "../store"
 import { addEmptyNote, setActiveNote, isSavingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote, deleteNoteById } from "./journalSlice"
@@ -76,30 +76,30 @@ export const startSavingNote = () => {
 //     }
 // }
 /* This function delete only the note in database but no the images */
-export const startDeletingNote = () => {
-    return async (dispatch: AppDispatch, getState: typeof store.getState) => {
-        const { uid } = getState().auth
-        const { active: note } = getState().journal
-        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
-        await deleteDoc(docRef)
-        dispatch(deleteNoteById(note))
-    }
-}
+// export const startDeletingNote = () => {
+//     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
+//         const { uid } = getState().auth
+//         const { active: note } = getState().journal
+//         const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+//         await deleteDoc(docRef)
+//         dispatch(deleteNoteById(note))
+//     }
+// }
 
 export const startDeletingNoteAndImages = () => {
     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
         const { uid } = getState().auth
         const { active: note } = getState().journal
-        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+        /* Delete images in cloudinary */
         const fileDeletePromises = []
-        // for (const file of note.imageUrl!) {
-        //     fileDeletePromises.push(deleteImage(file))
-        // }
-        // const resultDelete = await Promise.all(fileDeletePromises)
-        // console.log("Result delete", resultDelete)
-        // deleteImage(note)
-        /* await deleteDoc(docRef)
-        dispatch(deleteNoteById(note)) */
+        for (const file of note.imageUrl!) {
+            fileDeletePromises.push(deleteImage(file))
+        }
+        const resultDelete = await Promise.all(fileDeletePromises)
+        console.log("Result delete", resultDelete)
+        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+        await deleteDoc(docRef)
+        dispatch(deleteNoteById(note))
 
     }
 }
