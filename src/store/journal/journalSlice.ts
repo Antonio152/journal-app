@@ -77,10 +77,13 @@ export const journalSlice = createSlice({
         },
         removeImageFromArray: (state, action: PayloadAction<number>) => {
             state.filesUploadImg = state.filesUploadImg.filter((_, i) => i !== action.payload)
+        },
+        restartImagesUpload: (state) => {
+            state.filesUploadImg = [];
         }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { clearNoteOnLogout, setPhotosToActiveNote, isSavingNewNote, addEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById,setImagesUpload,removeImageFromArray } = journalSlice.actions;
+export const { clearNoteOnLogout, setPhotosToActiveNote, isSavingNewNote, addEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById,setImagesUpload,removeImageFromArray,restartImagesUpload } = journalSlice.actions;

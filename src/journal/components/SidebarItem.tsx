@@ -1,7 +1,7 @@
 import NoteIcon from '@mui/icons-material/Note';
 import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { useMemo } from 'react'
-import { setActiveNote } from '../../store/journal/journalSlice'
+import { restartImagesUpload, setActiveNote } from '../../store/journal/journalSlice'
 import { NoteModel } from '../../store/journal/types/journalSliceTypes'
 import { useAppDispatch } from '../../store/store'
 
@@ -15,6 +15,7 @@ export const SidebarItem = ({ title, id, body, date, imageUrl = [] }: NoteModel)
 
     const defineActiveNote = () => {
         dispatch(setActiveNote({ title, id, body, date, imageUrl }))
+        dispatch(restartImagesUpload())
     }
 
     return (
