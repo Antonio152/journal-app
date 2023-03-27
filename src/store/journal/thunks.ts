@@ -4,7 +4,7 @@ import { FirebaseDB } from "../../firebase/config"
 import { deleteImage } from "../../helpers/fileDelete"
 import { fileUpload } from "../../helpers/fileUpload"
 import { AppDispatch, store } from "../store"
-import { addEmptyNote, setActiveNote, isSavingNewNote, setNotes, setSaving, updateNote, setPhotosToActiveNote, deleteNoteById } from "./journalSlice"
+import { addEmptyNote, setActiveNote, isSavingNewNote, setNotes, setSaving, updateNote, deleteNoteById } from "./journalSlice"
 
 export const startNewNote = () => {
     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
@@ -56,6 +56,7 @@ export const startSavingNote = () => {
             noteToFirestore.imageUrl = [...active.imageUrl!, ...photosUrl]
         }
         const updatedNote = {...active, imageUrl:noteToFirestore.imageUrl}
+        /* Update conent in firebase */
         const docRef = doc(FirebaseDB, `${uid}/journal/notes/${active.id}`)
         /* The prop merge , helps to add the values that missing in the DB */
         await setDoc(docRef, noteToFirestore, { merge: true })
@@ -63,29 +64,29 @@ export const startSavingNote = () => {
     }
 }
 
-// export const startUploadingFiles = () => {
-//     return async (dispatch: AppDispatch,getState: typeof store.getState) => {
-//         dispatch(setSaving())
-//         const { filesUploadImg } = getState().journal
-//         const fileUploadPromises = []
-//         for (const file of filesUploadImg) {
-//             fileUploadPromises.push(fileUpload(file))
-//         }
-//         const photosUrl = await Promise.all(fileUploadPromises)
-//         dispatch(setPhotosToActiveNote(photosUrl))
-//     }
-// }
+/* export const startUploadingFiles = () => {
+    return async (dispatch: AppDispatch,getState: typeof store.getState) => {
+        dispatch(setSaving())
+        const { filesUploadImg } = getState().journal
+        const fileUploadPromises = []
+        for (const file of filesUploadImg) {
+            fileUploadPromises.push(fileUpload(file))
+        }
+        const photosUrl = await Promise.all(fileUploadPromises)
+        dispatch(setPhotosToActiveNote(photosUrl))
+    }
+} */
 /* This function delete only the note in database but no the images */
-// export const startDeletingNote = () => {
-//     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
-//         const { uid } = getState().auth
-//         const { active: note } = getState().journal
-//         const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
-//         await deleteDoc(docRef)
-//         dispatch(deleteNoteById(note))
-//     }
-// }
-
+/* export const startDeletingNote = () => {
+    return async (dispatch: AppDispatch, getState: typeof store.getState) => {
+        const { uid } = getState().auth
+        const { active: note } = getState().journal
+        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+        await deleteDoc(docRef)
+        dispatch(deleteNoteById(note))
+    }
+}
+ */
 export const startDeletingNoteAndImages = () => {
     return async (dispatch: AppDispatch, getState: typeof store.getState) => {
         const { uid } = getState().auth
@@ -95,11 +96,31 @@ export const startDeletingNoteAndImages = () => {
         for (const file of note.imageUrl!) {
             fileDeletePromises.push(deleteImage(file))
         }
-        const resultDelete = await Promise.all(fileDeletePromises)
-        console.log("Result delete", resultDelete)
+        await Promise.all(fileDeletePromises)
         const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
         await deleteDoc(docRef)
         dispatch(deleteNoteById(note))
 
+    }
+}
+export const deleteImageInNote = (id_delete: string) => {
+    return async (dispatch: AppDispatch, getState: typeof store.getState) => {
+        dispatch(setSaving())
+        const { uid } = getState().auth
+        const { active } = getState().journal
+        if (!uid) throw new Error("El UID del usuario no existe");
+        /* Delete image in cloudinary */
+        deleteImage(id_delete)
+        /* Update register in firebase */
+        const filteredImages = active.imageUrl!.filter((id) => id !== id_delete)
+        const noteToFirestore = { ...active, imageUrl: filteredImages }
+        delete noteToFirestore.id
+        /* Note with ID */
+        const updatedNote = {...active, imageUrl: filteredImages}
+        /* Update imageUrl in firebase */
+        const docRef = doc(FirebaseDB, `${uid}/journal/notes/${active.id}`)
+        /* The prop merge , helps to add the values that missing in the DB */
+        await setDoc(docRef, noteToFirestore, { merge: true })
+        dispatch(updateNote(updatedNote))
     }
 }

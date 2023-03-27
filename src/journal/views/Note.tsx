@@ -7,7 +7,6 @@ import {
 } from "@mui/icons-material";
 import { Button, Grid, IconButton, TextField, Typography } from "@mui/material";
 import Swal from "sweetalert2";
-import "sweetalert2/dist/sweetalert2.css";
 import { useForm } from "../../auth/hooks/useForm";
 import {
   setActiveNote,
@@ -67,7 +66,6 @@ export const Note = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(startDeletingNoteAndImages());
-
         Swal.fire(
           "Eliminado",
           "La nota se ha sido eliminado correctamente",

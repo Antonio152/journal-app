@@ -33,7 +33,6 @@ export const deleteImage = async (urlImg: string) => {
     if (!resp.ok) throw new Error(" No se pudo eliminar la imagen");
 
     const cloudResp = await resp.json();
-
     return cloudResp;
   } catch (error) {
     console.log(error);
