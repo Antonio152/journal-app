@@ -3,11 +3,15 @@ import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 import { drawerWProps } from '../types/navBarProps';
 import { startLogout } from '../../store/auth/thunks';
 import { useAppDispatch } from '../../store/store';
+import { setDrawer } from '../../store/journal/journalSlice';
 
 export const NavBar = ({ drawerWidth = 230 }: drawerWProps) => {
     const dispatch = useAppDispatch()
-    const onLogout = () => {
+    const onLogout = ():void => {
         dispatch(startLogout())
+    }
+    const activeDrawer = ():void => {
+        dispatch(setDrawer(true))
     }
     return (
         <AppBar
@@ -21,6 +25,7 @@ export const NavBar = ({ drawerWidth = 230 }: drawerWProps) => {
                     color='inherit'
                     edge="start"
                     sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
+                    onClick={activeDrawer}
                 >
                     <MenuOutlined />
                 </IconButton>
