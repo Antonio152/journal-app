@@ -119,6 +119,9 @@ export const Note = () => {
           />
           Guardar
         </Button>
+        <Button onClick={onDelete} sx={{ padding: 2 }} color="error" disabled={isSaving}>
+          <DeleteOutline />
+        </Button>
       </Grid>
 
       <Grid container>
@@ -147,11 +150,6 @@ export const Note = () => {
         />
       </Grid>
 
-      <Grid container justifyContent={"end"}>
-        <Button onClick={onDelete} sx={{ mt: 2 }} color="error">
-          <DeleteOutline />
-        </Button>
-      </Grid>
       {/* Image gallery */}
       <ImageGallery
         imagesCloud={noteActive.imageUrl!}

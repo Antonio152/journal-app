@@ -13,15 +13,14 @@ export const NavBar = ({ drawerWidth = 230 }: drawerWProps) => {
         <AppBar
             position='fixed'
             sx={{
-                width: { sm: `calc(100% - ${drawerWidth}px)` },
-                ml: { sm: `${drawerWidth}px` }
+                width: { xs: '100%', sm: '100%', md: `calc(100% - ${drawerWidth}px)` },
             }}
         >
             <Toolbar>
                 <IconButton
                     color='inherit'
                     edge="start"
-                    sx={{ mr: 2, display: { sm: 'none' } }}
+                    sx={{ mr: 2, display: { xs: 'block', sm: 'block', md: 'none' } }}
                 >
                     <MenuOutlined />
                 </IconButton>

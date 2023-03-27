@@ -11,16 +11,17 @@ export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
   );
   const { notes } = useSelector((state: RootState) => state.journal);
   const validationI = photoURL.length > 0;
+  
   return (
     <Box
       component="nav"
-      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 }, display: { xs: 'none', sm: 'none', md: 'block' } }}
     >
       <Drawer
         variant="permanent" // temporary
         open
         sx={{
-          display: { xs: "block" },
+          display: { md: "block" },
           "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
         }}
       >

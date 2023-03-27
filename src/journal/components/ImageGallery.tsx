@@ -51,7 +51,7 @@ export const ImageGallery = memo(
     }
 
     return (
-      <Container>
+      <Container sx={{ maxWidth:{ lg: "100%"}}}>
         {/* Imagenes to upload */}
         {imagesToUpload.length > 0 && (
           <>
