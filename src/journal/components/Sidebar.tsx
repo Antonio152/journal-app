@@ -6,6 +6,7 @@ import { SidebarItem } from "./SidebarItem";
 import avatar from "/assets/user-avatar.png";
 import { setDrawer, setVariantScreen } from "../../store/journal/journalSlice";
 import { useEffect } from "react";
+
 type variantV = "permanent" | "persistent" | "temporary" | undefined;
 
 export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {

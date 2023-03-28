@@ -10,7 +10,6 @@ import { imagesToBlobs } from "../functions/NoteFunctions";
 /* Remove images in array before upload */
 import { removeImageFromArray } from "../../store/journal/journalSlice";
 /* Rmove images in cloud */
-import { deleteImage } from "../../helpers/fileDelete";
 import { deleteImageInNote } from "../../store/journal/thunks";
 
 export const ImageGallery = memo(

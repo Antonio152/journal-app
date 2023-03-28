@@ -1,8 +1,8 @@
 import sha1 from "sha1";
 
-const cloud_name = "dmvy2o9vv";
-const api_key = "485537737814332";
-const api_secret = "Qfr0k7FeTii_bB3d21_p1RNrmzs";
+const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const api_key = import.meta.env.VITE_CLOUDINARY_API_KEY;
+const api_secret = import.meta.env.VITE_CLOUDINARY_API_SECRET;
 
 export function processUrlImg(imgUrl: string) {
   var cadReplace = imgUrl.substring(0, imgUrl.lastIndexOf("/"));

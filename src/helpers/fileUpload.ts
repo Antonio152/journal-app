@@ -1,6 +1,6 @@
 export const fileUpload = async (file: File) => {
     if (!file) throw new Error('No file selected');
-    const cloudUrl = 'https://api.cloudinary.com/v1_1/dmvy2o9vv/upload';
+    const cloudUrl = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`;
     const formData = new FormData();
     formData.append('upload_preset', 'react-journal');
     formData.append('file', file);
