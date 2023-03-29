@@ -18,7 +18,6 @@ import { ImageGallery } from "../components";
 import { dateString } from "../functions/NoteFunctions";
 
 export const Note = () => {
-  console.log(import.meta.env.VITE_PRUEBA_VARIABLE) 
   /* Redux logic */
   const dispatch = useAppDispatch();
   const {

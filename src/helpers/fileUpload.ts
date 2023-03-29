@@ -1,6 +1,6 @@
 export const fileUpload = async (file: File) => {
     if (!file) throw new Error('No file selected');
-    const cloudUrl = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`;
+    const cloudUrl = `https://api.cloudinary.com/v1_1/${process.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`;
     const formData = new FormData();
     formData.append('upload_preset', 'react-journal');
     formData.append('file', file);
@@ -13,7 +13,6 @@ export const fileUpload = async (file: File) => {
         const cloudRes = await res.json();
         return cloudRes.secure_url;
     } catch (error) {
-        console.log(error)
         throw new Error('Unknow error');
     }
 }

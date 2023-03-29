@@ -1,8 +1,8 @@
 import sha1 from "sha1";
 
-const cloud_name = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-const api_key = import.meta.env.VITE_CLOUDINARY_API_KEY;
-const api_secret = import.meta.env.VITE_CLOUDINARY_API_SECRET;
+const cloud_name = process.env.VITE_CLOUDINARY_CLOUD_NAME;
+const api_key = process.env.VITE_CLOUDINARY_API_KEY;
+const api_secret = process.env.VITE_CLOUDINARY_API_SECRET;
 
 export function processUrlImg(imgUrl: string) {
   var cadReplace = imgUrl.substring(0, imgUrl.lastIndexOf("/"));
@@ -20,7 +20,7 @@ export const deleteImage = async (urlImg: string) => {
 
   const formData = new FormData();
   formData.append("public_id", public_id);
-  formData.append("api_key", api_key);
+  formData.append("api_key", api_key!);
   formData.append("signature", shaCode);
   formData.append("timestamp", timestamp);
 
