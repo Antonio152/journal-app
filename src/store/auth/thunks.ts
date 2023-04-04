@@ -5,7 +5,7 @@ import { clearNoteOnLogout } from '../journal/journalSlice'
 import { AppDispatch } from '../store'
 import { checkingCredentials, logout, login } from './authSlice'
 
-export const checkingAuthentication = (email: string, password: string) => {
+export const checkingAuthentication = () => {
   return async (dispatch: AppDispatch) => {
     dispatch(checkingCredentials())
   }

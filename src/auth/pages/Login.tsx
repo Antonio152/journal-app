@@ -1,12 +1,20 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-import { Google } from "@mui/icons-material";
-import { Button, Grid, TextField, Typography, Link, Alert } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../hooks/useForm";
-import { checkingAuthentication, startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth/thunks";
+import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth/thunks";
 import { RootState, useAppDispatch } from "../../store/store";
+/* Mui imports */
+// import { Google } from "@mui/icons-material";
+// import { Button, Grid, TextField, Typography, Link, Alert } from "@mui/material";
+import Google  from '@mui/icons-material/Google';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 const formData = {
   email: "",
@@ -27,7 +35,7 @@ export const Login = () => {
   }
   return (
     <AuthLayout title="Login">
-      <form onSubmit={onSubmit} className="animate__animated animate__fadeIn animate__faster">
+      <form aria-label="formSubmit" onSubmit={onSubmit} className="animate__animated animate__fadeIn animate__faster">
         <Grid container>
           <Grid item xs={11} sx={{ mt: 2, ml: "auto", mr: "auto" }}>
             <TextField
@@ -38,6 +46,7 @@ export const Login = () => {
               value={email}
               onChange={onChangeEvent}
               fullWidth
+              aria-label="email"
             />
           </Grid>
           <Grid item xs={11} sx={{ mt: 2, ml: "auto", mr: "auto" }}>
@@ -49,6 +58,9 @@ export const Login = () => {
               value={password}
               onChange={onChangeEvent}
               fullWidth
+              inputProps={{
+                "data-testid": "password",
+              }}
             />
           </Grid>
           <Grid
@@ -81,6 +93,7 @@ export const Login = () => {
                 variant="contained" 
                 fullWidth 
                 sx={{ color: "white" }}
+                aria-label="Google-btn"
                 disabled={isAuthenticating}>
                 <Google />
                 <Typography sx={{ ml: 1 }}>Google</Typography>
