@@ -16,7 +16,7 @@ export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
     (state: RootState) => state.auth
   );
   const { notes,drawerState, variantScreen } = useSelector((state: RootState) => state.journal);
-  const validationI = photoURL.length > 0;
+  const validationI = photoURL!== undefined && photoURL !== null && photoURL.length > 0;
   
   const handleDrawerClose = () => {
     dispatch(setDrawer(false));

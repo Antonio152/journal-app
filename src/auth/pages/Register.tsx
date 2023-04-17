@@ -7,29 +7,32 @@ import { RootState, useAppDispatch } from "../../store/store";
 import { createUserWithEmailPassword } from "../../store/auth/thunks";
 import { useSelector } from "react-redux";
 
+const initialValues = {
+  fullName: "",
+  email: "",
+  password: "",
+}
+
 export const Register = () => {
   const dispatch = useAppDispatch()
   const { status, errorMessage } = useSelector((state: RootState) => state.auth)
   const isCheckingAuthenticating = useMemo(() => status === "checking", [status])
   const [formSubmitted, setFormSubmitted] = useState(false)
-  const initialValues = {
-    fullName: "",
-    email: "",
-    password: "",
-  }
+  
   const formValidation = {
     fullName: [(value: string) => value.length > 0, "El nombre es requerido"],
     email: [(value: string) => value.includes("@"), "El correo no es válido"],
-    password: [(value: string) => value.length >= 1, "El nombre es requerido"],
+    password: [(value: string) => value.length >= 1, "La contraseña es requerida"],
   }
 
   const { fullName, email, password, onChangeEvent, fullNameValid, emailValid, passwordValid, isFormValid, formState } = useForm(initialValues, formValidation)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormSubmitted(true)
+     setFormSubmitted(true)
     if (!isFormValid) return;
     dispatch(createUserWithEmailPassword(formState))
+    
     /* dispatch(checkingAuthentication(email, password)) */
   }
   return (
@@ -46,7 +49,7 @@ export const Register = () => {
               value={fullName}
               onChange={onChangeEvent}
               error={!!fullNameValid && formSubmitted}
-              helperText={fullNameValid}
+              helperText={!!fullNameValid && formSubmitted ? fullNameValid : ""}
             />
           </Grid>
           <Grid item xs={11} sx={{ mt: 2, ml: "auto", mr: "auto" }}>
@@ -59,7 +62,7 @@ export const Register = () => {
               value={email}
               onChange={onChangeEvent}
               error={!!emailValid && formSubmitted}
-              helperText={emailValid}
+              helperText={!!emailValid && formSubmitted ? emailValid : ""}
             />
           </Grid>
           <Grid item xs={11} sx={{ mt: 2, ml: "auto", mr: "auto" }}>
@@ -72,7 +75,7 @@ export const Register = () => {
               value={password}
               onChange={onChangeEvent}
               error={!!passwordValid && formSubmitted}
-              helperText={passwordValid}
+              helperText={!!passwordValid && formSubmitted ? passwordValid : ""}
             />
           </Grid>
           <Grid
