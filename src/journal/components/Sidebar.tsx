@@ -3,7 +3,7 @@ import { drawerWProps } from "../types/navBarProps";
 import { RootState, useAppDispatch } from "../../store/store";
 import { useSelector } from "react-redux";
 import { SidebarItem } from "./SidebarItem";
-import avatar from "/assets/user-avatar.png";
+import avatar from "./assets/user-avatar.png";
 import { setDrawer, setVariantScreen } from "../../store/journal/journalSlice";
 import { useEffect } from "react";
 
