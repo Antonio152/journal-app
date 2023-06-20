@@ -18,7 +18,6 @@ import { useEffect } from "react";
 
 type variantV = "permanent" | "persistent" | "temporary" | undefined;
 
-//TODO: FIX THE PROBLEM WITH THE NAME OF THE USER
 export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -67,7 +66,7 @@ export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
           <Typography
             variant="inherit"
             component="div"
-            sx={{ display: "flex" }}
+            sx={{ display: "flex", alignItems: "center" }}
           >
             <img
               src={validationI ? photoURL : avatar}
