@@ -6,12 +6,6 @@ import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { JournalRoutes } from "../journal/routes/JournalRoutes";
 import { CheckingAuth } from "../ui/components/CheckingAuth";
 export const AppRouter = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate("/auth/login", { replace: true });
-  }, []);
-
   const status = useCheckAuth();
   if (status === "checking") {
     return <CheckingAuth />;

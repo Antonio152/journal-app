@@ -18,6 +18,7 @@ import { useEffect } from "react";
 
 type variantV = "permanent" | "persistent" | "temporary" | undefined;
 
+//TODO: FIX THE PROBLEM WITH THE NAME OF THE USER
 export const SideBar = ({ drawerWidth = 240 }: drawerWProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
